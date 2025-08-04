@@ -3,6 +3,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+// Đọc cấu hình Kestrel từ appsettings
+builder.WebHost.ConfigureKestrel(options =>
+{
+    var kestrelConfig = builder.Configuration.GetSection("Kestrel");
+    if (kestrelConfig.Exists())
+    {
+        options.Configure(kestrelConfig);
+    }
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -13,7 +23,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseRouting();
 
