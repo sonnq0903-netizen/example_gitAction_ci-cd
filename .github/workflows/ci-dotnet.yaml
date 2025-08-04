@@ -28,13 +28,8 @@ jobs:
         ssh-private-key: ${{ secrets.DEPLOY_KEY }}
     
     - name: Deploy to VPS
-      shell: bash
+      shell: pwsh
       run: |
-        ssh -o StrictHostKeyChecking=no root@192.168.214.99 << 'EOF'
-          cd /var/www/sourceexample
-          git pull origin main
-          dotnet publish -c Release -o publish
-          # Run hoặc restart app
-          pkill -f sourceexample.dll || true
-          nohup dotnet ./publish/sourceexample.dll > log.txt 2>&1 &
-        EOF
+        $cmd = "cd /var/www/sourceexample && git pull origin main && dotnet publish -c Release -o publish && pkill -f sourceexample.dll || true && nohup dotnet ./publish/sourceexample.dll > log.txt 2>&1 &"
+        ssh -o StrictHostKeyChecking=no root@192.168.214.99 $cmd
+
