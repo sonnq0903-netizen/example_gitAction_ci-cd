@@ -34,7 +34,7 @@ jobs:
     
     - name: Deploy to VPS
       run: |
-        ssh -o StrictHostKeyChecking=no sonnq@192.168.214.99 << 'EOF'
+        ssh -o StrictHostKeyChecking=no root@192.168.214.99 << 'EOF'
           cd /var/www/sourceexample
           git pull origin main
           dotnet publish -c Release -o publish
