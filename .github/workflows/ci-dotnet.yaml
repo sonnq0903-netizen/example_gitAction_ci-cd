@@ -28,8 +28,14 @@ jobs:
         ssh-private-key: ${{ secrets.DEPLOY_KEY }}
     
     - name: Deploy to VPS
-      shell: pwsh
+      shell: powershell
       run: |
-        $cmd = "cd /var/www/sourceexample && git pull origin main && dotnet publish -c Release -o publish && pkill -f sourceexample.dll || true && nohup dotnet ./publish/sourceexample.dll > log.txt 2>&1 &"
-        ssh -o StrictHostKeyChecking=no root@192.168.214.99 $cmd
+        $sshCommand = @"
+        cd /var/www/sourceexample
+        git pull origin main
+        dotnet publish -c Release -o publish
+        pkill -f sourceexample.dll
+        nohup dotnet ./publish/sourceexample.dll > log.txt 2>&1 &
+        "@
+            ssh -o StrictHostKeyChecking=no root@192.168.214.99 "$sshCommand"
 
