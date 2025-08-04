@@ -26,3 +26,19 @@ jobs:
 
     - name: Run unit tests
       run: dotnet test --no-build --verbosity normal
+
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.4
+      with:
+        ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+    
+    - name: Deploy to VPS
+      run: |
+        ssh -o StrictHostKeyChecking=no sonnq@192.168.214.99 << 'EOF'
+          cd /var/www/sourceexample
+          git pull origin main
+          dotnet publish -c Release -o publish
+          # Run hoặc restart app
+          pkill -f sourceexample.dll || true
+          nohup dotnet ./publish/sourceexample.dll > log.txt 2>&1 &
+        EOF
