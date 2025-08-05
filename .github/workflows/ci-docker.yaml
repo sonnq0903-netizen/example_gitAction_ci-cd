@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - name: Checkout code
@@ -28,6 +28,10 @@ jobs:
         SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
         TAG=${GITHUB_REF##*/}-${SHORT_SHA}
         echo "tag=$TAG" >> $GITHUB_OUTPUT
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.4
+      with:
+        ssh-private-key: ${{ secrets.DEPLOY_KEY }}
 
     - name: Build and Push Docker image
       uses: docker/build-push-action@v5
@@ -35,3 +39,15 @@ jobs:
         context: .
         push: true
         tags: sonnq0903/sourceexample:${{ steps.vars.outputs.tag }}
+
+    - name: Deploy to VPS via PowerShell + Git Bash
+      shell: powershell
+      run: |
+        & "C:\Program Files\Git\bin\bash.exe" -c "
+          ssh -o StrictHostKeyChecking=no sonnq@192.168.214.99 '
+            docker pull sonnq0903/sourceexample:${{ steps.vars.outputs.tag }} &&
+            docker stop sourceexample || true &&
+            docker rm sourceexample || true &&
+            docker run -d -p 8080:5158 --name sourceexample sonnq0903/sourceexample:${{ steps.vars.outputs.tag }}
+          '
+        "

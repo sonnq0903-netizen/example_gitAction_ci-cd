@@ -40,7 +40,7 @@ jobs:
       shell: powershell
       run: |
         & "C:\Program Files\Git\bin\bash.exe" -c "
-          ssh -o StrictHostKeyChecking=no root@192.168.214.99 'bash /var/www/sourceexample/deploy.sh'
+          ssh -o StrictHostKeyChecking=no root@192.168.214.98 'bash /var/www/sourceexample/deploy.sh'
         "
 
     
