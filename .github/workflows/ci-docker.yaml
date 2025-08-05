@@ -24,10 +24,14 @@ jobs:
 
     - name: Set Docker tag
       id: vars
+      shell: powershell
       run: |
-        SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
-        TAG=${GITHUB_REF##*/}-${SHORT_SHA}
-        echo "tag=$TAG" >> $GITHUB_OUTPUT
+        $SHORT_SHA = $env:GITHUB_SHA.Substring(0,7)
+        $BRANCH_NAME = $env:GITHUB_REF.Split("/")[-1]
+        $TAG = "$BRANCH_NAME-$SHORT_SHA"
+        echo "tag=$TAG" >> $env:GITHUB_OUTPUT
+
+
     - name: Setup SSH
       uses: webfactory/ssh-agent@v0.5.4
       with:
