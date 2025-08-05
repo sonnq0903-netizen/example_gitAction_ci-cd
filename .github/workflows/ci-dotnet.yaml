@@ -32,7 +32,7 @@ jobs:
       run: where bash
 
     - name: Check Git Bash execution
-      shell: 'C:\Program Files\Git\bin\bash.exe --noprofile --norc -e -o pipefail'
+      shell: '"C:\Program Files\Git\bin\bash.exe" --noprofile --norc -e -o pipefail'
       run: |
         echo "Git Bash is working!"
         bash --version
