@@ -44,8 +44,8 @@ jobs:
             cd /var/www/sourceexample &&
             git pull origin main &&
             dotnet publish -c Release -o publish &&
-            pkill -f sourceexample.dll || true &&
-            nohup dotnet ./publish/sourceexample.dll > log.txt 2>&1 &'
+            pkill -f SourceExample.dll || true &&
+            nohup dotnet ./publish/SourceExample.dll > log.txt 2>&1 &'
         "
     
 
