@@ -27,9 +27,20 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.DEPLOY_KEY }}
 
-    - name: Deploy to VPS
+    - name: Check which bash is being used
+      shell: cmd
+      run: where bash
+
+    - name: Check Git Bash execution
+      shell: 'C:\Program Files\Git\bin\bash.exe --noprofile --norc -e -o pipefail'
       run: |
-        ssh -t -o StrictHostKeyChecking=no root@192.168.214.99 << 'EOF'
+        echo "Git Bash is working!"
+        bash --version
+
+    - name: Deploy to VPS
+      shell: 'C:\Program Files\Git\bin\bash.exe --noprofile --norc -e -o pipefail'
+      run: |
+        ssh -o StrictHostKeyChecking=no root@192.168.214.99 << 'EOF'
           cd /var/www/sourceexample
           git pull origin main
           dotnet publish -c Release -o publish
