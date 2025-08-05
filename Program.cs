@@ -4,15 +4,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 // Đọc cấu hình Kestrel từ appsettings
-// builder.WebHost.ConfigureKestrel(options =>
-// {
-//     var kestrelConfig = builder.Configuration.GetSection("Kestrel");
-//     if (kestrelConfig.Exists())
-//     {
-//         options.Configure(kestrelConfig);
-//     }
-// });
-builder.WebHost.UseUrls("http://0.0.0.0:5158");
+builder.WebHost.ConfigureKestrel(options =>
+{
+    var kestrelConfig = builder.Configuration.GetSection("Kestrel");
+    if (kestrelConfig.Exists())
+    {
+        options.Configure(kestrelConfig);
+    }
+});
+// builder.WebHost.UseUrls("http://0.0.0.0:5158");
 
 
 var app = builder.Build();
