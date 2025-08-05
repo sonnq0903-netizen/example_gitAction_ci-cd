@@ -31,17 +31,10 @@ jobs:
       shell: cmd
       run: where bash
 
-    - name: Check Git Bash execution
-      shell: 'C:\Windows\System32\bash.exe --noprofile --norc -e -o pipefail "{0}"'
+    - name: Check Git Bash via PowerShell
+      shell: powershell
       run: |
-        echo "Git Bash is working!"
-        bash --version
-
-    - name: Check Git Bash execution 2  
-      shell: 'C:\Users\Dell\AppData\Local\Microsoft\WindowsApps\bash.exe --noprofile --norc -e -o pipefail "{0}"'
-      run: |
-        echo "Git Bash is working!"
-        bash --version
+        & "C:\Program Files\Git\bin\bash.exe" -c "echo Git Bash is working! && bash --version"
 
     - name: Deploy to VPS
       shell: 'C:\Program Files\Git\bin\bash.exe --noprofile --norc -e -o pipefail'
