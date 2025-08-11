@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
@@ -44,17 +44,10 @@ jobs:
         push: true
         tags: sonnq0903/sourceexample:${{ steps.vars.outputs.tag }}
 
-    - name: Deploy to VPS via PowerShell + Git Bash
-      shell: powershell
-      env:
-        VPS_USER: ${{ secrets.VPS_USER }}
-        VPS_HOST: ${{ secrets.VPS_HOST }}
+    - name: Deploy to VPS
       run: |
-        & "C:\Program Files\Git\bin\bash.exe" -c "
-          ssh -o StrictHostKeyChecking=no $env:VPS_USER@$env:VPS_HOST '
-            docker pull sonnq0903/sourceexample:${{ steps.vars.outputs.tag }} &&
-            docker stop sourceexample || true &&
-            docker rm sourceexample || true &&
-            docker run -d -p 8080:5158 --name sourceexample sonnq0903/sourceexample:${{ steps.vars.outputs.tag }}
-          '
-        "
+        ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+        "docker pull sonnq0903/sourceexample:${{ steps.vars.outputs.tag }} && \
+         docker stop sourceexample || true && \
+         docker rm sourceexample || true && \
+         docker run -d -p 8080:5158 --name sourceexample sonnq0903/sourceexample:${{ steps.vars.outputs.tag }}"
