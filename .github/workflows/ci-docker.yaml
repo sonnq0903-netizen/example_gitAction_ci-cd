@@ -45,7 +45,7 @@ jobs:
 
     - name: Deploy to VPS
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+        ssh -o StrictHostKeyChecking=no -p 21924 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
         "docker pull sonnq0903/sourceexample:${{ steps.vars.outputs.tag }} && \
          docker stop sourceexample || true && \
          docker rm sourceexample || true && \
