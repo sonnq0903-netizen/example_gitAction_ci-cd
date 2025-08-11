@@ -46,9 +46,12 @@ jobs:
 
     - name: Deploy to VPS via PowerShell + Git Bash
       shell: powershell
+      env:
+        VPS_USER: ${{ secrets.VPS_USER }}
+        VPS_HOST: ${{ secrets.VPS_HOST }}
       run: |
         & "C:\Program Files\Git\bin\bash.exe" -c "
-          ssh -o StrictHostKeyChecking=no root@192.168.214.99 '
+          ssh -o StrictHostKeyChecking=no $env:VPS_USER@$env:VPS_HOST '
             docker pull sonnq0903/sourceexample:${{ steps.vars.outputs.tag }} &&
             docker stop sourceexample || true &&
             docker rm sourceexample || true &&
